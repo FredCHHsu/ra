@@ -23,8 +23,6 @@ $action-color: rgb(76, 157, 205);
 
 .inputNumberBase {
   display: inline-flex;
-  border: 1px dashed gray;
-  padding: 8px;
   gap: 8px;
   font-size: 16px;
 
@@ -53,6 +51,6 @@ $action-color: rgb(76, 157, 205);
 }
 
 .disabled {
-  border-color: lightgray;
-  color: lightgray;
+  border-color: $font-color;
+  color: $font-color;
 }

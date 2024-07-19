@@ -1,0 +1,35 @@
+.banner {
+  border: 1px solid #def;
+  border-radius: 4px;
+  background-color: rgb(238, 249, 255);
+  padding: 16px;
+  font-size: 14px;
+  color: gray;
+}
+
+.roomRow {
+  & + .roomRow {
+    border-top: 1px solid lightgray;
+  }
+  padding: 8px 0px;
+}
+
+.roomTitle {
+  margin: 16px 0px 8px;
+}
+
+.guestRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-top: 8px;
+  margin-bottom: 8px;
+}
+
+.guestType {
+}
+
+.note {
+  color: #999;
+}

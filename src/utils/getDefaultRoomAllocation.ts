@@ -1,13 +1,17 @@
-interface Room {
+export interface Room {
   roomPrice: number;
   adultPrice: number;
   childPrice: number;
   capacity: number;
 }
 
-interface Guest {
+export interface Guest {
   adult: number;
   child: number;
+}
+
+export interface Price {
+  price: number;
 }
 
 export type Allocation = Room &

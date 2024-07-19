@@ -3,6 +3,7 @@ import {
   ChangeEvent,
   FocusEvent,
   FunctionComponent,
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -26,18 +27,20 @@ const triggerInputEvent: (arg0: HTMLInputElement, arg1: number) => void = (
 
 interface CustomInputNumberProps {
   name: string;
+  value?: number;
   min?: number;
   max?: number;
   step?: number;
   disabled?: boolean;
   disableAdd?: boolean;
   disableSub?: boolean;
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => {};
-  onBlur?: (e: FocusEvent<HTMLDivElement>) => {};
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e: FocusEvent<HTMLDivElement>) => void;
 }
 
 const CustomInputNumber: FunctionComponent<CustomInputNumberProps> = ({
   name,
+  value,
   min,
   max,
   step,
@@ -49,38 +52,47 @@ const CustomInputNumber: FunctionComponent<CustomInputNumberProps> = ({
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleSub1 = () => {
+  const handleSub1 = useCallback(() => {
+    if (disableSub) {
+      return;
+    }
     if (inputRef.current) {
       if (typeof min !== "undefined" && min >= +inputRef.current.value) {
         return;
       }
       triggerInputEvent(inputRef.current, +inputRef.current.value - 1);
     }
-  };
+  }, [disableSub, min]);
 
-  const handleAdd1 = () => {
+  const handleAdd1 = useCallback(() => {
+    if (disableAdd) {
+      return;
+    }
     if (inputRef.current) {
       if (typeof max !== "undefined" && +inputRef.current.value >= max) {
         return;
       }
       triggerInputEvent(inputRef.current, +inputRef.current.value + 1);
     }
-  };
+  }, [disableAdd, max]);
 
   const [isPressing, setIsPressing] = useState<boolean>(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const startPressing = (callback: () => void) => () => {
-    setIsPressing(true);
-    callback(); // Immediate increment
+  const startPressing = useCallback(
+    (callback: () => void) => () => {
+      setIsPressing(true);
+      callback();
 
-    timeoutRef.current = setTimeout(() => {
-      intervalRef.current = setInterval(callback, 100); // Increment every 100ms
-    }, 500); // Start continuous increment after 500ms
-  };
+      timeoutRef.current = setTimeout(() => {
+        intervalRef.current = setInterval(callback, 200);
+      }, 1000);
+    },
+    []
+  );
 
-  const stopPressing = () => {
+  const stopPressing = useCallback(() => {
     setIsPressing(false);
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -90,7 +102,7 @@ const CustomInputNumber: FunctionComponent<CustomInputNumberProps> = ({
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
-  };
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -129,6 +141,7 @@ const CustomInputNumber: FunctionComponent<CustomInputNumberProps> = ({
         max={max}
         step={step}
         disabled={disabled}
+        value={value}
       />
       <button
         className={clsx(styles.button, {

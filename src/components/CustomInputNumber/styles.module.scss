@@ -1,0 +1,58 @@
+$item-width: 48px;
+$item-height: 48px;
+$default-font-size: 16px;
+$default-border-radius: 4px;
+
+// pick from official site;
+// logo color
+$main-color: rgb(116, 192, 229);
+$font-color: rgb(135, 205, 232);
+
+// search color
+$action-color: rgb(76, 157, 205);
+
+.squareItem {
+  width: $item-width;
+  height: $item-height;
+  box-shadow: none;
+  border: 1px solid $action-color;
+  border-radius: $default-border-radius;
+  border-width: thin;
+  border-style: solid;
+}
+
+.inputNumberBase {
+  display: inline-flex;
+  border: 1px dashed gray;
+  padding: 8px;
+  gap: 8px;
+  font-size: 16px;
+
+  .input {
+    @extend .squareItem;
+    box-sizing: border-box;
+    border-color: rgb(197, 197, 197);
+    font-size: $default-font-size;
+    text-align: center;
+    outline: none;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+    }
+  }
+}
+
+.button {
+  @extend .squareItem;
+  border-color: $action-color;
+  padding: 4px;
+  background-color: transparent;
+  color: $action-color;
+  font-size: $default-font-size;
+}
+
+.disabled {
+  border-color: lightgray;
+  color: lightgray;
+}

@@ -1,14 +1,14 @@
 "use client";
 import {
-  ChangeEvent,
-  FocusEvent,
-  FunctionComponent,
+  type ChangeEvent,
+  type FocusEvent,
+  type FunctionComponent,
   useCallback,
   useEffect,
   useRef,
-  useState,
 } from "react";
 import clsx from "clsx";
+
 import PlusIcon from "./PlusIcon";
 import MinusIcon from "./MinusIcon";
 
@@ -76,47 +76,40 @@ const CustomInputNumber: FunctionComponent<CustomInputNumberProps> = ({
     }
   }, [disableAdd, max]);
 
-  const [isPressing, setIsPressing] = useState<boolean>(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const startPressing = useCallback(
     (callback: () => void) => () => {
-      setIsPressing(true);
       callback();
-
       timeoutRef.current = setTimeout(() => {
         intervalRef.current = setInterval(callback, 200);
-      }, 1000);
+      }, 800);
     },
     []
   );
 
-  const stopPressing = useCallback(() => {
-    setIsPressing(false);
+  const clearTimer = useCallback(() => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
     }
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
-      intervalRef.current = null;
     }
   }, []);
 
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, []);
+  const stopPressing = useCallback(() => {
+    clearTimer();
+  }, [clearTimer]);
 
   const disableSubButton = disableSub || disabled;
   const disableAddButton = disableAdd || disabled;
+
+  useEffect(() => {
+    if (disableAddButton || disableSubButton) {
+      clearTimer();
+    }
+  }, [clearTimer, disableAddButton, disableSubButton]);
 
   return (
     <div className={styles.inputNumberBase} onBlur={onBlur}>

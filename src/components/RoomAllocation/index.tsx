@@ -1,16 +1,16 @@
 "use client";
 import {
-  ChangeEvent,
-  FunctionComponent,
+  type ChangeEvent,
+  type FunctionComponent,
   useCallback,
   useMemo,
   useState,
 } from "react";
 import getDefaultRoomAllocation, {
-  Guest,
-  Room,
+  type Guest,
+  type Room,
+  type Allocation,
   getRoomPrice,
-  Allocation,
 } from "src/utils/getDefaultRoomAllocation";
 import CustomInputNumber from "../CustomInputNumber";
 
@@ -34,7 +34,6 @@ const RoomAllocation: FunctionComponent<RoomAllocationProps> = ({
   const onChangeAllocation = useCallback(
     (roomIdx: number, type: "adult" | "child") =>
       (e: ChangeEvent<HTMLInputElement>) => {
-        console.log(e, e.target.name, e.target.value);
         const nextResult = result.map((allocation, i) => ({
           ...allocation,
           ...(roomIdx === i
@@ -87,10 +86,12 @@ const RoomAllocation: FunctionComponent<RoomAllocationProps> = ({
                 onChange={onChangeAllocation(i, "adult")}
                 min={0}
                 max={room.capacity - result[i].child}
-                disableSub={result[i].adult <= 0}
+                disableSub={
+                  result[i].adult <= 0 ||
+                  (result[i].child > 0 && result[i].adult <= 1)
+                }
                 disableAdd={
                   result[i].adult >= room.capacity ||
-                  // FIXME:
                   total >= room.capacity ||
                   remain.adult <= 0
                 }
@@ -109,7 +110,6 @@ const RoomAllocation: FunctionComponent<RoomAllocationProps> = ({
                 disableSub={result[i].child <= 0}
                 disableAdd={
                   result[i].child >= room.capacity ||
-                  // FIXME: trigger too many times
                   total >= room.capacity ||
                   remain.child <= 0
                 }

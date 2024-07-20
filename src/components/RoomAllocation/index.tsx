@@ -6,11 +6,11 @@ import {
   useMemo,
   useState,
 } from "react";
-import {
+import getDefaultRoomAllocation, {
   Guest,
   Room,
-  Price,
   getRoomPrice,
+  Allocation,
 } from "src/utils/getDefaultRoomAllocation";
 import CustomInputNumber from "../CustomInputNumber";
 
@@ -19,7 +19,7 @@ import styles from "./styles.module.scss";
 interface RoomAllocationProps {
   guest: Guest;
   rooms: Room[];
-  onChange: (result: (Guest & Price)[]) => void;
+  onChange: (result: Allocation[]) => void;
 }
 
 const RoomAllocation: FunctionComponent<RoomAllocationProps> = ({
@@ -27,11 +27,9 @@ const RoomAllocation: FunctionComponent<RoomAllocationProps> = ({
   rooms,
   onChange,
 }) => {
-  const [result, setResult] = useState([
-    { adult: 0, child: 0, price: 0 },
-    { adult: 0, child: 0, price: 0 },
-    { adult: 0, child: 0, price: 0 },
-  ]);
+  const [result, setResult] = useState<Allocation[]>(() =>
+    getDefaultRoomAllocation(guest, rooms)
+  );
 
   const onChangeAllocation = useCallback(
     (roomIdx: number, type: "adult" | "child") =>

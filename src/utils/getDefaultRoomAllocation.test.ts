@@ -1,6 +1,6 @@
 import getDefaultRoomAllocation, {
+  type Allocation,
   getRoomPrice,
-  getTotalPrice,
 } from "./getDefaultRoomAllocation";
 
 const room1 = {
@@ -11,6 +11,10 @@ const room1 = {
 };
 const room2 = { roomPrice: 0, adultPrice: 500, childPrice: 500, capacity: 4 };
 const room3 = { roomPrice: 500, adultPrice: 300, childPrice: 200, capacity: 4 };
+
+/** get price summation of all allocated room */
+export const getTotalPrice = (rooms: Allocation[]) =>
+  rooms.reduce((acc, val) => acc + (val.price ?? 0), 0);
 
 describe("calculate single room price", () => {
   test("no basic room price", () => {

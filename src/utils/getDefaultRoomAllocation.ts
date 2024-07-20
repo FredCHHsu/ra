@@ -12,14 +12,11 @@ export interface Guest {
   child: number;
 }
 
-export interface Price {
-  price: number;
-}
-
 export type Allocation = Guest & {
   price?: number | undefined;
 };
 
+/** get price of one room */
 export const getRoomPrice = (room: Room, guest: Guest) => {
   if (guest.adult === 0 && guest.child === 0) return 0;
   return (
@@ -29,9 +26,7 @@ export const getRoomPrice = (room: Room, guest: Guest) => {
   );
 };
 
-export const getTotalPrice = (rooms: Allocation[]) =>
-  rooms.reduce((acc, val) => acc + (val.price ?? 0), 0);
-
+/** get allocation for minimum price summation */
 const getDefaultRoomAllocation: (
   guest: Guest,
   rooms: Room[]

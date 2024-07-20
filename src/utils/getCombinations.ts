@@ -1,3 +1,4 @@
+/** @deprecated performance issue */
 const getCombinations = (range: number, groups: number[]) => {
   const stringResults = new Set();
 

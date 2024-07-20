@@ -1,5 +1,4 @@
 import getDefaultRoomAllocation, {
-  getAllocations,
   getRoomPrice,
   getTotalPrice,
 } from "./getDefaultRoomAllocation";
@@ -42,58 +41,6 @@ describe("calculate single room price", () => {
   });
 });
 
-describe("get all possible Allocations", () => {
-  test("basic case", () => {
-    expect(getAllocations({ adult: 1, child: 0 }, [room1, room2])).toEqual(
-      expect.arrayContaining([
-        [
-          { ...room1, adult: 1, child: 0, price: 1200 },
-          { ...room2, adult: 0, child: 0, price: 0 },
-        ],
-        [
-          { ...room1, adult: 0, child: 0, price: 0 },
-          { ...room2, adult: 1, child: 0, price: 500 },
-        ],
-      ])
-    );
-  });
-  test("basic case 2", () => {
-    expect(getAllocations({ adult: 2, child: 0 }, [room1, room2])).toEqual(
-      expect.arrayContaining([
-        [
-          { ...room1, adult: 2, child: 0, price: 1400 },
-          { ...room2, adult: 0, child: 0, price: 0 },
-        ],
-        [
-          { ...room1, adult: 1, child: 0, price: 1200 },
-          { ...room2, adult: 1, child: 0, price: 500 },
-        ],
-        [
-          { ...room1, adult: 0, child: 0, price: 0 },
-          { ...room2, adult: 2, child: 0, price: 1000 },
-        ],
-      ])
-    );
-  });
-  test("basic case with child", () => {
-    expect(getAllocations({ adult: 1, child: 1 }, [room1, room2])).toEqual(
-      expect.arrayContaining([
-        [
-          { ...room1, adult: 1, child: 1, price: 1300 },
-          { ...room2, adult: 0, child: 0, price: 0 },
-        ],
-        [
-          { ...room1, adult: 0, child: 0, price: 0 },
-          { ...room2, adult: 1, child: 1, price: 1000 },
-        ],
-      ])
-    );
-  });
-  test("only 1 child", () => {
-    expect(getAllocations({ adult: 0, child: 1 }, [room1, room2])).toEqual([]);
-  });
-});
-
 describe("get lowest price from room allocation", () => {
   test("example 1 - a", () => {
     const defaultRooms = getDefaultRoomAllocation({ adult: 4, child: 2 }, [
@@ -122,16 +69,15 @@ describe("get lowest price from room allocation", () => {
     expect(getTotalPrice(defaultRooms)).toBe(1000 + 4 * 200); // room 1
   });
 
-  // TODO: performance issue
-  // test("example 2", () => {
-  //   const defaultRooms = getDefaultRoomAllocation({ adult: 16, child: 0 }, [
-  //     { roomPrice: 500, adultPrice: 500, childPrice: 300, capacity: 4 },
-  //     { roomPrice: 500, adultPrice: 500, childPrice: 300, capacity: 8 },
-  //     { roomPrice: 0, adultPrice: 500, childPrice: 300, capacity: 8 },
-  //     { roomPrice: 500, adultPrice: 1000, childPrice: 600, capacity: 2 },
-  //   ]);
-  //   expect(getTotalPrice(defaultRooms)).toBe(8500);
-  // });
+  test("example 2", () => {
+    const defaultRooms = getDefaultRoomAllocation({ adult: 16, child: 0 }, [
+      { roomPrice: 500, adultPrice: 500, childPrice: 300, capacity: 4 },
+      { roomPrice: 500, adultPrice: 500, childPrice: 300, capacity: 8 },
+      { roomPrice: 0, adultPrice: 500, childPrice: 300, capacity: 8 },
+      { roomPrice: 500, adultPrice: 1000, childPrice: 600, capacity: 2 },
+    ]);
+    expect(getTotalPrice(defaultRooms)).toBe(8500);
+  });
 
   test("example 3", () => {
     const defaultRooms = getDefaultRoomAllocation({ adult: 0, child: 1 }, [

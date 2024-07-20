@@ -19,7 +19,7 @@ import styles from "./styles.module.scss";
 interface RoomAllocationProps {
   guest: Guest;
   rooms: Room[];
-  onChange: (result: Allocation[]) => void;
+  onChange?: (result: Allocation[]) => void;
 }
 
 const RoomAllocation: FunctionComponent<RoomAllocationProps> = ({

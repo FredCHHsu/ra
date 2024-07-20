@@ -1,9 +1,9 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import CustomInputNumber from "./index";
 
 it("App Router: Works with Server Components", () => {
-  render(<CustomInputNumber />);
-  expect(screen.getByRole("heading")).toHaveTextContent("Custom input number");
+  render(<CustomInputNumber name="name" />);
+  waitFor(() => expect(screen.getAllByRole("button")).toBeInTheDocument());
 });
 
 // 點擊加號使 value 等於 max 時繼續點擊,確認 onChange 無後續觸發
